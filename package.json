@@ -1,0 +1,26 @@
+{
+  "name": "json-type-tool",
+  "version": "0.1.1",
+  "description": "json type tool",
+  "main": "json-type-tool.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "json",
+    "type"
+  ],
+  "author": "fwg",
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adf0001/json-type-tool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adf0001/json-type-tool/issues"
+  },
+  "homepage": "https://github.com/adf0001/json-type-tool#readme"
+}
