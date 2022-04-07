@@ -195,6 +195,66 @@ module.exports = {
 		));
 	},
 
+	".copyContainer()": function (done) {
+		var a1 = { aa: 1, bb: [22, 33, { cc: 44, dd: 55 }] };
+		var a2 = json_type_tool.copy(a1);
+		var a3 = {};
+		json_type_tool.copy(a1, a3);
+
+		done(!(
+			cmp_json(a1, a2) &&
+			cmp_json(a1, a3) &&
+			
+			a1 !== a2 &&
+			a1.bb !== a2.bb &&
+
+			a1.bb[2] !== a2.bb[2] &&
+			cmp_json(a1.bb[2], a2.bb[2]) &&
+			cmp_json(a1.bb[2], { cc: 44, dd: 55 }) &&
+
+			//string
+			cmp_json(json_type_tool.copyContainer("12"), "12") &&
+
+			cmp_json(json_type_tool.copy("12"), "12") &&
+			cmp_json(json_type_tool.copy(""), "") &&
+
+			//number
+			cmp_json(json_type_tool.copy(0), 0) &&
+			cmp_json(json_type_tool.copy(1.1), 1.1) &&
+
+			//boolean
+			cmp_json(json_type_tool.copy(true), true) &&
+			cmp_json(json_type_tool.copy(false), false) &&
+			cmp_json(json_type_tool.copy(new Boolean(true)), true) &&
+
+			//object
+			cmp_json(json_type_tool.copy({}), {}) &&
+			cmp_json(json_type_tool.copy({ a: undefined }), { a: undefined }) &&
+			cmp_json(json_type_tool.copy({ a: 0 }), { a: 0 }) &&
+			cmp_json(json_type_tool.copy({ a: 1, value: 2 }), { a: 1, value: 2 }) &&
+			cmp_json(json_type_tool.copy({ a: 1, value: "0" }), { a: 1, value: "0" }) &&
+
+			//array
+			cmp_json(json_type_tool.copy([]), []) &&
+			cmp_json(json_type_tool.copy([0]), [0]) &&
+			cmp_json(json_type_tool.copy([1]), [1]) &&
+			cmp_json(json_type_tool.copy([1, 2]), [1, 2]) &&
+			cmp_json(json_type_tool.copy([[0, 2], 3]), [[0, 2], 3]) &&
+			cmp_json(json_type_tool.copy([["null", 2], 3]), [["null", 2], 3]) &&
+
+			//null
+			cmp_json(json_type_tool.copy(null), null) &&
+
+			//others
+			cmp_json(json_type_tool.copy(undefined), undefined) &&
+			cmp_json(json_type_tool.copy(new Date(2000, 1, 1, 0, 0, 0)), 949334400000) &&
+			cmp_json(json_type_tool.copy(function () { }), function () { }) &&
+			cmp_json(json_type_tool.copy(/reg/i), /reg/i) &&
+
+			true
+		));
+	},
+
 	".convert() - string": function (done) {
 		done(!(
 			//string

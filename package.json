@@ -1,6 +1,6 @@
 {
   "name": "json-type-tool",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "json type tool",
   "main": "json-type-tool.js",
   "scripts": {

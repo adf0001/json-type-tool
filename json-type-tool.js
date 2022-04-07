@@ -40,7 +40,7 @@ var isContainer = function (json, strict) {
 	return type === "object" || type === "array";
 }
 
-function isContainerEmpty(json) {
+var isContainerEmpty = function (json) {
 	if (!json || typeof json !== "object") return true;
 
 	//array
@@ -49,6 +49,22 @@ function isContainerEmpty(json) {
 	//object
 	for (var i in json) { if (typeof json[i] !== "undefined") return false; }
 	return true;
+}
+
+var copyContainer = function (src, dest) {
+	if (src && src.valueOf) src = src.valueOf();	//strip object
+	if (!isContainer(src, true)) return src;
+
+	if (!dest) dest = (src instanceof Array) ? [] : {};
+
+	var i, v;
+	for (i in src) {
+		v = src[i];
+		if (v && v.valueOf) v = v.valueOf();
+
+		dest[i] = isContainer(v, true) ? copyContainer(v) : v;
+	}
+	return dest;
 }
 
 //simplify array and object
@@ -216,6 +232,8 @@ exports.typeName = typeName;
 exports.isStrictObject = isStrictObject;
 exports.isContainer = isContainer;
 exports.isContainerEmpty = isContainerEmpty;
+exports.copyContainer = copyContainer;
+exports.copy = copyContainer;
 
 exports.convert = convert;
 
