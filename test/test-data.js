@@ -164,6 +164,37 @@ module.exports = {
 		));
 	},
 
+	".isContainerEmpty()": function (done) {
+		done(!(
+			//object and array
+
+			!json_type_tool.isContainerEmpty({ a: 11 }) &&
+			!json_type_tool.isContainerEmpty([11]) &&
+
+			//all others return true
+
+			json_type_tool.isContainerEmpty({}) &&
+			json_type_tool.isContainerEmpty([]) &&
+
+			//others
+			json_type_tool.isContainerEmpty("aaa") &&
+			json_type_tool.isContainerEmpty(123) &&
+			json_type_tool.isContainerEmpty(true) &&
+			json_type_tool.isContainerEmpty(null) &&
+			json_type_tool.isContainerEmpty() &&
+			json_type_tool.isContainerEmpty(function () { }) &&
+			json_type_tool.isContainerEmpty(new Function("console.log('a')")) &&
+
+			//strict
+			json_type_tool.isContainerEmpty(new RegExp("reg")) &&
+			json_type_tool.isContainerEmpty(Object.create({})) &&
+			json_type_tool.isContainerEmpty(/reg/) &&
+			json_type_tool.isContainerEmpty(Object.create({})) &&
+
+			true
+		));
+	},
+
 	".convert() - string": function (done) {
 		done(!(
 			//string

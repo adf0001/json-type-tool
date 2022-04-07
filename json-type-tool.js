@@ -40,6 +40,17 @@ var isContainer = function (json, strict) {
 	return type === "object" || type === "array";
 }
 
+function isContainerEmpty(json) {
+	if (!json || typeof json !== "object") return true;
+
+	//array
+	if (json instanceof Array) return !(json.length > 0);
+
+	//object
+	for (var i in json) { if (typeof json[i] !== "undefined") return false; }
+	return true;
+}
+
 //simplify array and object
 //return [json,type] if success; return empty if fail
 var _simplyfiy = function (json, jsonType, first) {
@@ -69,11 +80,6 @@ var _simplyfiy = function (json, jsonType, first) {
 	return [json, jsonType];
 }
 
-function _isEmptyObject(obj) {
-	for (var i in obj) { if (typeof obj[i] !== "undefined") return false; }
-	return true;
-}
-
 var convert = function (json, toType) {
 	if (json && json.valueOf) json = json.valueOf();
 	var jsonType = typeName(json, true);
@@ -89,7 +95,7 @@ var convert = function (json, toType) {
 			case "boolean":
 				return json.toString();
 			case "object":
-				if (_isEmptyObject(json)) return "";
+				if (isContainerEmpty(json)) return "";
 			case "array":
 				sv = _simplyfiy(json, jsonType);
 				if (sv) return convert(sv[0], toType);
@@ -111,7 +117,7 @@ var convert = function (json, toType) {
 			case "boolean":
 				return json ? 1 : 0;
 			case "object":
-				if (_isEmptyObject(json)) return 0;
+				if (isContainerEmpty(json)) return 0;
 			case "array":
 				sv = _simplyfiy(json, jsonType, jsonType === "array");
 				if (sv) return convert(sv[0], toType);
@@ -134,7 +140,7 @@ var convert = function (json, toType) {
 			case "boolean":
 				return json;
 			case "object":
-				if (_isEmptyObject(json)) return false;
+				if (isContainerEmpty(json)) return false;
 			case "array":
 				sv = _simplyfiy(json, jsonType, jsonType === "array");
 				return sv ? convert(sv[0], toType) : (new Boolean(json)).valueOf();
@@ -170,7 +176,7 @@ var convert = function (json, toType) {
 			case "boolean":
 				return json ? [json] : [];
 			case "object":
-				if (_isEmptyObject(json)) return [];
+				if (isContainerEmpty(json)) return [];
 
 				toValue = [];
 				for (i in json) {
@@ -209,6 +215,7 @@ module.exports = exports = typeName;
 exports.typeName = typeName;
 exports.isStrictObject = isStrictObject;
 exports.isContainer = isContainer;
+exports.isContainerEmpty = isContainerEmpty;
 
 exports.convert = convert;
 
