@@ -194,6 +194,11 @@ var convert = function (json, toType) {
 				return [];
 		}
 	}
+	/*
+	else if (toType === "null") {
+		return null;
+	}
+	*/
 	else {
 		return null;
 	}
