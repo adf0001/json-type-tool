@@ -195,16 +195,25 @@ module.exports = {
 		));
 	},
 
-	".copyContainer()": function (done) {
+	"container tool": function (done) {
 		var a1 = { aa: 1, bb: [22, 33, { cc: 44, dd: 55 }] };
 		var a2 = json_type_tool.copy(a1);
 		var a3 = {};
 		json_type_tool.copy(a1, a3);
 
+		var a10 = { a: 1, b: 2 };
+		var a11 = [1, 2, 3];
+
 		done(!(
+			json_type_tool.getContainerItemCount(a10) === 2 &&
+			json_type_tool.getContainerItemCount(a11) === 3 &&
+
+			cmp_json(json_type_tool.clearContainer(a10), {}) &&
+			cmp_json(json_type_tool.clearContainer(a11), []) &&
+
 			cmp_json(a1, a2) &&
 			cmp_json(a1, a3) &&
-			
+
 			a1 !== a2 &&
 			a1.bb !== a2.bb &&
 

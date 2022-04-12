@@ -51,6 +51,24 @@ var isContainerEmpty = function (json) {
 	return true;
 }
 
+var getContainerItemCount = function (json) {
+	if (!json || typeof json !== "object") return 0;
+
+	return (json instanceof Array) ? json.length : Object.keys(json).length;
+}
+
+var clearContainer = function (json) {
+	if (!json || typeof json !== "object") return json;
+
+	if (json instanceof Array) json.splice(0, json.length);
+	else {
+		var ks = Object.keys(json);
+		var i, imax = ks.length;
+		for (i = 0; i < imax; i++) { delete json[ks[i]]; }
+	}
+	return json;
+}
+
 var copyContainer = function (src, dest) {
 	if (src && src.valueOf) src = src.valueOf();	//strip object
 	if (!isContainer(src, true)) return src;
@@ -232,6 +250,8 @@ exports.typeName = typeName;
 exports.isStrictObject = isStrictObject;
 exports.isContainer = isContainer;
 exports.isContainerEmpty = isContainerEmpty;
+exports.getContainerItemCount = getContainerItemCount;
+exports.clearContainer = clearContainer;
 exports.copyContainer = copyContainer;
 exports.copy = copyContainer;
 
