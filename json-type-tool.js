@@ -40,15 +40,20 @@ var isContainer = function (json, strict) {
 	return type === "object" || type === "array";
 }
 
-var isContainerEmpty = function (json) {
-	if (!json || typeof json !== "object") return true;
+var isContainerNotEmpty = function (json) {
+	if (!json || typeof json !== "object") return false;
 
 	//array
-	if (json instanceof Array) return !(json.length > 0);
+	if (json instanceof Array) return (json.length > 0);
 
 	//object
-	for (var i in json) { if (typeof json[i] !== "undefined") return false; }
-	return true;
+	for (var i in json) { if (typeof json[i] !== "undefined") return true; }
+	return false;
+}
+
+//a not-op for isContainerNotEmpty()
+var isContainerEmpty = function (json) {
+	return !isContainerNotEmpty(json);
 }
 
 var getContainerItemCount = function (json) {
@@ -244,22 +249,28 @@ var convert = function (json, toType) {
 	}
 }
 
-module.exports = exports = typeName;
+module.exports = Object.assign(
+	typeName,	//default export
+	{
+		typeName,
+		isStrictObject,
+		isContainer,
+		isContainerNotEmpty,
+		isContainerEmpty,
+		getContainerItemCount,
+		clearContainer,
 
-exports.typeName = typeName;
-exports.isStrictObject = isStrictObject;
-exports.isContainer = isContainer;
-exports.isContainerEmpty = isContainerEmpty;
-exports.getContainerItemCount = getContainerItemCount;
-exports.clearContainer = clearContainer;
-exports.copyContainer = copyContainer;
-exports.copy = copyContainer;
+		copyContainer,
+		copy: copyContainer,
 
-exports.convert = convert;
+		convert,
 
-exports.toString = function (json) { return convert(json, "string"); }
-exports.toNumber = function (json) { return convert(json, "number"); }
-exports.toBoolean = function (json) { return convert(json, "boolean"); }
-exports.toObject = function (json) { return convert(json, "object"); }
-exports.toArray = function (json) { return convert(json, "array"); }
-exports.toNull = function (json) { return convert(json, "null"); }
+		toString: function (json) { return convert(json, "string"); },
+		toNumber: function (json) { return convert(json, "number"); },
+		toBoolean: function (json) { return convert(json, "boolean"); },
+		toObject: function (json) { return convert(json, "object"); },
+		toArray: function (json) { return convert(json, "array"); },
+		toNull: function (json) { return convert(json, "null"); },
+
+	}
+);

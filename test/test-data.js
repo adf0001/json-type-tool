@@ -164,6 +164,37 @@ module.exports = {
 		));
 	},
 
+	".isContainerNotEmpty()": function (done) {
+		done(!(
+			//object and array
+
+			json_type_tool.isContainerNotEmpty({ a: 11 }) &&
+			json_type_tool.isContainerNotEmpty([11]) &&
+
+			//all others return true
+
+			!json_type_tool.isContainerNotEmpty({}) &&
+			!json_type_tool.isContainerNotEmpty([]) &&
+
+			//others
+			!json_type_tool.isContainerNotEmpty("aaa") &&
+			!json_type_tool.isContainerNotEmpty(123) &&
+			!json_type_tool.isContainerNotEmpty(true) &&
+			!json_type_tool.isContainerNotEmpty(null) &&
+			!json_type_tool.isContainerNotEmpty() &&
+			!json_type_tool.isContainerNotEmpty(function () { }) &&
+			!json_type_tool.isContainerNotEmpty(new Function("console.log('a')")) &&
+
+			//strict
+			!json_type_tool.isContainerNotEmpty(new RegExp("reg")) &&
+			!json_type_tool.isContainerNotEmpty(Object.create({})) &&
+			!json_type_tool.isContainerNotEmpty(/reg/) &&
+			!json_type_tool.isContainerNotEmpty(Object.create({})) &&
+
+			true
+		));
+	},
+
 	".isContainerEmpty()": function (done) {
 		done(!(
 			//object and array
@@ -580,6 +611,19 @@ module.exports = {
 
 			true
 		));
+	},
+
+	"check exports": function (done) {
+		var m= json_type_tool;
+		for (var i in m) {
+			if (typeof m[i] === "undefined") { done("undefined: " + i); return; }
+		}
+		done(false);
+
+		console.log(m);
+		var list = "export list: " + Object.keys(m).join(", ");
+		console.log(list);
+		return list;
 	},
 
 };
